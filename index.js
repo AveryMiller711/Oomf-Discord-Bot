@@ -16,6 +16,13 @@ for(const file of commandFiles){
 
 client.once('ready', () => {
     console.info(`Logged in as ${client.user.tag}!`);
+    client.user.setPresence({
+        status: 'online',
+        activity: {
+            name: '$help',
+            type: 'Playing'
+        }
+    });
 });
 
 client.on('message', message => {
