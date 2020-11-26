@@ -5,6 +5,7 @@ module.exports = {
     aliases: ['icon', 'pfp'],
     description: 'Sends the user\'s avatar.',
     cooldown: 5,
+    category: 'info',
     execute(message, args){
         const user = message.mentions.users.first() || message.author;
         const embed = new Discord.MessageEmbed()

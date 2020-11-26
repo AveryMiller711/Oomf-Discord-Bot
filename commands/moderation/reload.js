@@ -9,10 +9,10 @@ module.exports = {
 
         if (!command) return message.channel.send(`There is no command with name or alias \`${commandName}\`, ${message.author}!`);
 
-        delete require.cache[require.resolve(`./${command.name}.js`)];
+        delete require.cache[require.resolve(`../${command.category}/${command.name}.js`)];
 
         try{
-            const newCommand = require(`./${command.name}.js`);
+            const newCommand = require(`../${command.category}/${command.name}.js`);
             message.client.commands.set(newCommand.name, newCommand);
             message.channel.send(`Command \`${command.name}\` was reloaded`);
         } catch(error){
