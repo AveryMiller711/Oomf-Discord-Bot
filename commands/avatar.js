@@ -1,14 +1,16 @@
+const Discord = require("discord.js");
+
 module.exports = {
     name: 'avatar',
     aliases: ['icon', 'pfp'],
     description: 'Sends the user\'s avatar.',
     cooldown: 5,
     execute(message, args){
-        if (message.mentions.users.size) {
-            const taggedUser = message.mentions.users.first();
-            message.channel.send(taggedUser.displayAvatarURL());
-          } else {
-              message.channel.send(message.author.displayAvatarURL());
-          }
+        const user = message.mentions.users.first() || message.author;
+        const embed = new Discord.MessageEmbed()
+            .setTitle('**Avatar for ' + user.tag + '**')
+            .setImage(user.displayAvatarURL({ dynamic: true, size: 1024}))
+            .setColor(message.guild.member(user).displayHexColor);
+        message.channel.send(embed);
     },
 };
