@@ -18,25 +18,27 @@ module.exports = {
         const { commands } = message.client;
 
         if(!args.length){
-            data.push('Here\'s a list of all my commands:');
-            data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
+            //data.push('Here\'s a list of all my commands:');
+            //data.push(commands.map(command => command.name).join(', '));
+            //data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
             for(const file of infoFiles){
                 const command = require(`./${file}`);
-                info.push(command.name);
+                info.push(`\`${command.name}\``);
             }
 
             for(const file of moderationFiles){
                 const command = require(`../moderation/${file}`);
-                mod.push(command.name);
+                mod.push(`\`${command.name}\``);
             }
+
             const embed = new Discord.MessageEmbed()
                 .setAuthor('Command List', 'https://images-ext-2.discordapp.net/external/yA3ZlHkCIPgvkMiDmGE2M7GjoAFiobtgi5ZL6nCJj0g/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/776580934014337064/3da94dc96faa75d75dd1ddaa8ce226c1.png')
                 .addFields(
-                    { name: 'Info', value: info},
-                    { name: 'Moderation', value: mod},
-                );
+                    { name: ':information_source: Info', value: info.join(', ')},
+                    { name: ':hammer_pick: Moderation', value: mod.join(', ')},
+                )
+                .setFooter('To get more info on a command, do $help command name');
 
             return message.channel.send(embed)
                 .catch(error => {
