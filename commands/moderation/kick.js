@@ -1,5 +1,6 @@
 module.exports = {
     name: 'kick',
+    category: 'moderation',
     description: 'Kick command.',
     guildOnly: true,
     args: true,

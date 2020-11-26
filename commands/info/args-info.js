@@ -1,5 +1,6 @@
 module.exports = {
     name: 'args-info',
+    category: 'info',
     description: 'Information about the arguments provided.',
     args: true,
     usage: '<arg>',
