@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { prefix } = require('../../assets/config.json');
+const { prefix } = require('../../config.json');
 const fs = require('fs');
 const infoFiles = fs.readdirSync('./commands/info').filter(file => file.endsWith('.js'));
 const moderationFiles = fs.readdirSync('./commands/moderation').filter(file => file.endsWith('.js'));
