@@ -7,6 +7,7 @@ client.commands = new Discord.Collection();
 
 const infoFiles = fs.readdirSync('./commands/info').filter(file => file.endsWith('.js'));
 const moderationFiles = fs.readdirSync('./commands/moderation').filter(file => file.endsWith('.js'));
+const oomfFiles = fs.readdirSync('./commands/oomf').filter(file => file.endsWith('.js'));
 
 const cooldowns = new Discord.Collection();
 
@@ -17,6 +18,11 @@ for(const file of infoFiles){
 
 for(const file of moderationFiles){
     const command = require(`./commands/moderation/${file}`);
+    client.commands.set(command.name, command);
+}
+
+for(const file of oomfFiles){
+    const command = require(`./commands/oomf/${file}`);
     client.commands.set(command.name, command);
 }
 
