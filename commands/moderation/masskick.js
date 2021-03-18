@@ -11,7 +11,13 @@ module.exports = {
         }
         if (args.length) {
             const quantity = args;
-            message.channel.send(`You wanted to kick: ${args} people`);
+            if(typeof data==='number' && (data%1)===0) {
+                message.channel.send(`You wanted to kick ${args} people`);
+            } else if(args == 'all') {
+                message.channel.send(`You wanted to kick all people`);
+            } else {
+                message.channel.send('Unspecified quantity');
+            }
         } else {
             message.reply('ERR: No quantity given!');
         }
