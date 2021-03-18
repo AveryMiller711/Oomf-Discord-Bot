@@ -14,8 +14,6 @@ module.exports = {
             message.channel.send(`You wanted to kick: ${taggedUser.username}`);
         } else {
             message.reply('Please tag a valid user!');
-            message.channel.send('>fish');
-        
         }
     },
 };
