@@ -15,6 +15,8 @@ module.exports = {
                 message.channel.send(`You wanted to kick ${args} people`);
             } else if(args == 'all') {
                 message.channel.send(`You wanted to kick all people`);
+            } else if(message.guild.roles.cache.get(args)) {
+                message.channel.send(`You wanted to kick everyone with the ${args} role`);
             } else {
                 message.channel.send('Unspecified quantity');
             }
