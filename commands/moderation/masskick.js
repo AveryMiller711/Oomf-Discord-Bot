@@ -9,7 +9,7 @@ module.exports = {
         if(!message.member.hasPermission('KICK_MEMBERS')){
             return message.reply(`You do not have permission to use \`masskick\``);
         }
-        if (message.mentions.users.size) {
+        if (args.size) {
             const quantity = args;
             message.channel.send(`You wanted to kick: ${args} people`);
         } else {
