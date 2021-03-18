@@ -11,7 +11,7 @@ module.exports = {
         }
         if (args.length) {
             const quantity = args;
-            if(typeof data==='number' && (data%1)===0) {
+            if(typeof args==='number' && (args%1)===0) {
                 message.channel.send(`You wanted to kick ${args} people`);
             } else if(args == 'all') {
                 message.channel.send(`You wanted to kick all people`);
