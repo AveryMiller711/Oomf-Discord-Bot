@@ -13,6 +13,5 @@ module.exports = {
             .setImage(user.displayAvatarURL({ dynamic: true, size: 1024}))
             .setColor(message.guild.member(user).displayHexColor);
         message.channel.send(embed);
-        message.channel.send('>fish');
     },
 };
