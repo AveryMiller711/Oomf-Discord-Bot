@@ -10,13 +10,15 @@ module.exports = {
             return message.reply(`You do not have permission to use \`masskick\``);
         }
         if (args.length) {
-            const quantity = args;
             if((args%1)===0) {
-                message.channel.send(`You wanted to kick ${args} people`);
+                message.channel.send(`Kicking ${args} guild members...`);
             } else if(args == 'all') {
-                message.channel.send(`You wanted to kick all people`);
-            } else if(message.guild.roles.cache.get(args)) {
-                message.channel.send(`You wanted to kick everyone with the ${args} role`);
+                message.channel.send(`Kicking all guild members...`);
+            } else if(message.mentions.roles) {
+                let role = message.mentions.roles.first();
+                let membersWithRole = message.guild.roles.cache.get(role.id).members;
+                message.channel.send(`Kicking ${membersWithRole.size} guild members with the ${args} role...`);
+                message.channel.send(message.guild.roles.cache.get(role.id).members.map(m=>m.user.username));
             } else {
                 message.channel.send('Unspecified quantity');
             }
