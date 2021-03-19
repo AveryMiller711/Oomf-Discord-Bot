@@ -4,7 +4,7 @@ module.exports = {
     description: 'Kick command.',
     guildOnly: true,
     args: true,
-    usage: '<user>',
+    usage: '< user >',
     execute(message, args){
         if(!message.member.hasPermission('KICK_MEMBERS')){
             return message.reply(`You do not have permission to use \`kick\``);
