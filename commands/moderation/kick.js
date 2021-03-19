@@ -11,8 +11,12 @@ module.exports = {
         }
         if (message.mentions.members.size) {
             const taggedUser = message.mentions.members.first();
-            taggedUser.kick();
-            message.channel.send(`${message.mentions.users.first().username} was kicked... Bye loser!`);
+            if(taggedUser.kickable) {
+                taggedUser.kick();
+                message.channel.send(`${message.mentions.users.first().username} was kicked... Bye loser!`);
+            } else {
+                message.reply("I cannot kick this member!");
+            }
         } else {
             message.reply('Please tag a valid user!');
         }

@@ -18,7 +18,14 @@ module.exports = {
                 let role = message.mentions.roles.first();
                 let membersWithRole = message.guild.roles.cache.get(role.id).members;
                 message.channel.send(`Kicking ${membersWithRole.size} guild members with the ${args} role...`);
-                message.channel.send(message.guild.roles.cache.get(role.id).members.map(m=>m.user.username));
+                role.members.forEach(user => {
+                    if(user.kickable){
+                        message.channel.send(`Kicking ${user.user.username}`);
+                    } else {
+                        message.channel.send(`Cannot kick ${user.user.username}. Moving on...`);
+                    }
+                });
+                message.channel.send(`**Targets eliminated.**`)
             } else {
                 message.channel.send('Unspecified quantity');
             }
