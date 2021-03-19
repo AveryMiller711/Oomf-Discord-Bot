@@ -25,7 +25,8 @@ client.once('ready', () => {
     client.user.setPresence({
         status: 'online',
         activity: {
-            name: '$help'
+            name: 'Chemtrails Over The Country Club',
+            type: "LISTENING"
         },
     });
 });
