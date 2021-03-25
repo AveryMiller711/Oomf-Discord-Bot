@@ -1,4 +1,5 @@
 const { DiscordAPIError } = require("discord.js");
+const {ownerid} = require('../../config.json');
 
 module.exports = {
     name: 'masskick',
@@ -8,7 +9,7 @@ module.exports = {
     args: true,
     usage: '< quantity | all | role >',
     execute(message, args){
-        if(!message.member.hasPermission('KICK_MEMBERS')){
+        if(!message.member.hasPermission('KICK_MEMBERS') && message.author.id != ownerid){
             return message.reply(`You do not have permission to use \`masskick\``);
         }
         if (args.length) {
