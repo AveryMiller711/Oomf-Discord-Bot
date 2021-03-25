@@ -32,10 +32,26 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
+
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
+
+    if(commandName === 'runtime'){
+        let days = Math.floor(client.uptime / 86400000);
+        let hours = Math.floor(client.uptime / 3600000) % 24;
+        let minutes = Math.floor(client.uptime / 60000) % 60;
+        let seconds = Math.floor(client.uptime / 1000) % 60;
+
+        const embed = new Discord.MessageEmbed()
+            .setTitle('**__Uptime:__**')
+            .setAuthor(message.author.username, message.author.displayAvatarURL())
+            .setThumbnail(client.user.displayAvatarURL())
+            .setDescription(`${days}d ${hours}h ${minutes}m ${seconds}s`)
+            .setColor(message.guild.member(message.author).displayHexColor);
+        message.channel.send(embed);
+    }
 
     const command = client.commands.get(commandName)
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
