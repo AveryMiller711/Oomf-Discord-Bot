@@ -2,7 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 
-const client = new Discord.Client();
+global.client = new Discord.Client();
 client.commands = new Discord.Collection();
 
 const infoFiles = fs.readdirSync('./commands/info').filter(file => file.endsWith('.js'));
@@ -42,20 +42,9 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if(commandName === 'runtime'){
-        let days = Math.floor(client.uptime / 86400000);
-        let hours = Math.floor(client.uptime / 3600000) % 24;
-        let minutes = Math.floor(client.uptime / 60000) % 60;
-        let seconds = Math.floor(client.uptime / 1000) % 60;
-
-        const embed = new Discord.MessageEmbed()
-            .setTitle('**__Uptime:__**')
-            .setAuthor(message.author.username, message.author.displayAvatarURL())
-            .setThumbnail(client.user.displayAvatarURL())
-            .setDescription(`${days}d ${hours}h ${minutes}m ${seconds}s`)
-            .setColor(message.guild.member(message.author).displayHexColor);
-        message.channel.send(embed);
-    }
+    //if(commandName === 'runtime'){
+        
+    //}
 
     const command = client.commands.get(commandName)
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
