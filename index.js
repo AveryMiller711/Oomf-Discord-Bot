@@ -33,6 +33,10 @@ client.once('ready', () => {
 
 client.on('message', message => {
 
+    if(message.mentions.has(client.user)){
+        message.reply(`dont @ me fat`);
+    }
+
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
