@@ -34,7 +34,7 @@ client.once('ready', () => {
 client.on('message', message => {
 
     if(message.mentions.has(client.user)){
-        message.reply(`dont @ me fat`);
+        message.channel.send(`${message.author.toString()} dont @ me fat`);
     }
 
     if(!message.content.startsWith(prefix) || message.author.bot) return;
@@ -42,21 +42,17 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    //if(commandName === 'runtime'){
-        
-    //}
-
     const command = client.commands.get(commandName)
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
     if(!command) return;
 
     if(command.guildOnly && message.channel.type == 'dm'){
-        return message.reply('I can\'t execute that command inside DMs!');
+        return message.channel.send(`${message.author.toString()} I can't execute that command inside DMs!`);
     }
 
     if(command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
+        let reply = `You didn't provide any arguments, ${message.author.toString()}!`;
 
         if(command.usage){
             reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
@@ -78,7 +74,7 @@ client.on('message', message => {
 
         if(now < expirationTime){
             const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(`Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+            return message.channel.send(`${message.author.toString()} Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
         }
     }
 
@@ -89,7 +85,7 @@ client.on('message', message => {
         command.execute(message, args);
     } catch(error){
         console.error(error);
-        message.reply('There was an error trying to execute that command.')
+        message.channel.send(`${message.author.toString()} There was an error trying to execute that command.`)
     }
 });
 
