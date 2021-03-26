@@ -1,4 +1,3 @@
-const { DiscordAPIError } = require("discord.js");
 const {ownerid} = require('../../config.json');
 
 module.exports = {
@@ -18,53 +17,83 @@ module.exports = {
                 return ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
             };
 
-            if((args%1)===0) {
+            const timedOut = 10000;
+            const memberList = message.guild.members;
+
+            if((args%1)===0 && args > 0) {
 
                 message.channel.send(`Are you sure you want to kick ${args} guild members?`)
                     .then(function(message) {
-                        message.react('✅👍')
+                        message.react('✅')
                         message.react('❌')
-                        message.awaitReactions(filter, { max: 1, time: 10000, errors: ['time'] })
+                        message.awaitReactions(filter, { max: 1, time: timedOut, errors: ['time'] })
                             .then(collected => {
                                 const reaction = collected.first();
 
                                 if(reaction.emoji.name === '✅'){
                                     message.channel.send(`Kicking ${args} guild members...`);
                                     message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+                                    message.guild.members.fetch().then(fetchedMembers => {
+                                        count = 0;
+                                        fetchedMembers.forEach(member => {
+                                            if(count >= args || member.user.bot) return;
+                                            if(member.kickable){
+                                                message.channel.send(`Kicking ${member.user.username}`);
+                                                member.kick();
+                                                count += 1;
+                                            } else {
+                                                message.channel.send(`Cannot kick ${member.user.username}. Moving on...`);
+                                            }
+                                        });
+                                        message.channel.send(`Finished.`);
+                                    });
                                 } else {
-                                    message.channel.send(`Aborted command.`);
+                                    message.channel.send(`:warning: Command aborted :warning: `);
                                     message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
                                 }
                             })
                             .catch(collected => {
-                                message.channel.send(`Aborted command.`);
+                                message.channel.send(`:warning: Timed out: command aborted :warning:`);
                                 message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
                             });
                     });
                 
             } else if(args == 'all') {
-                message.channel.send(`Are you sure you want to kick ${args} guild members?`)
-                    .then(function(message) {
-                        message.react('✅')
-                        message.react('❌')
-                        message.awaitReactions(filter, { max: 1, time: 10000, errors: ['time'] })
-                            .then(collected => {
-                                const reaction = collected.first();
+                memberList.fetch().then(fetchedMembers => {
+                    message.channel.send(`Are you sure you want to kick ${fetchedMembers.size} guild members?`)
+                        .then(function(message) {
+                            message.react('✅')
+                            message.react('❌')
+                            message.awaitReactions(filter, { max: 1, time: timedOut, errors: ['time'] })
+                                .then(collected => {
+                                    const reaction = collected.first();
 
-                                if(reaction.emoji.name === '✅'){
-                                    message.channel.send(`Kicking ${args} guild members...`);
+                                    if(reaction.emoji.name === '✅'){
+                                        message.channel.send(`Kicking ${args} guild members...`);
+                                        message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+                                        message.guild.members.fetch().then(fetchedMembers => {
+                                            fetchedMembers.forEach(member => {
+                                                if(member.user.bot) return;
+                                                if(member.kickable){
+                                                    message.channel.send(`Kicking ${member.user.username}`);
+                                                    member.kick();
+                                                } else {
+                                                    message.channel.send(`Cannot kick ${member.user.username}. Moving on...`);
+                                                }
+                                            });
+                                        });
+                                    } else {
+                                        message.channel.send(`:warning: Command aborted :warning: `);
+                                        message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+                                    }
+                                })
+                                .catch(collected => {
+                                    message.channel.send(`:warning: Timed out: command aborted :warning:`);
                                     message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                                } else {
-                                    message.channel.send(`Aborted command.`);
-                                    message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                                }
-                            })
-                            .catch(collected => {
-                                message.channel.send(`Aborted command.`);
-                                message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                            });
-                    });
-
+                                });
+                        });
+                });
+                
             } else if(message.mentions.roles) {
                 let role = message.mentions.roles.first();
                 let membersWithRole = message.guild.roles.cache.get(role.id).members;
@@ -73,29 +102,30 @@ module.exports = {
                     .then(function(message) {
                         message.react('✅')
                         message.react('❌')
-                        message.awaitReactions(filter, { max: 1, time: 10000, errors: ['time'] })
+                        message.awaitReactions(filter, { max: 1, time: timedOut, errors: ['time'] })
                             .then(collected => {
                                 const reaction = collected.first();
 
                                 if(reaction.emoji.name === '✅'){
                                     message.channel.send(`Kicking ${membersWithRole.size} guild members with the ${args} role...`);
                                     message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
-                                    role.members.forEach(user => {
-                                        if(user.kickable){
-                                            message.channel.send(`Kicking ${user.user.username}`);
-                                            user.kick();
+                                    role.members.forEach(member => {
+                                        if(member.user.bot) return;
+                                        if(member.kickable){
+                                            message.channel.send(`Kicking ${member.user.username}`);
+                                            member.kick();
                                         } else {
-                                            message.channel.send(`Cannot kick ${user.user.username}. Moving on...`);
+                                            message.channel.send(`Cannot kick ${member.user.username}. Moving on...`);
                                         }
                                     });
                                     message.channel.send(`**Targets eliminated.**`)
                                 } else {
-                                    message.channel.send(`Aborted command.`);
+                                    message.channel.send(`:warning: Command aborted :warning: `);
                                     message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
                                 }
                             })
                             .catch(collected => {
-                                message.channel.send(`Aborted command.`);
+                                message.channel.send(`:warning: Timed out: command aborted :warning:`);
                                 message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
                             });
                     });

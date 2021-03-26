@@ -1,3 +1,5 @@
+const {ownerid} = require('../../config.json');
+
 module.exports = {
     name: 'kick',
     category: 'moderation',
@@ -6,7 +8,7 @@ module.exports = {
     args: true,
     usage: '< user >',
     execute(message, args){
-        if(!message.member.hasPermission('KICK_MEMBERS')){
+        if(!message.member.hasPermission('KICK_MEMBERS') && message.author.id != ownerid){
             return message.reply(`You do not have permission to use \`kick\``);
         }
         if (message.mentions.members.size) {
