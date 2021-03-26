@@ -89,4 +89,58 @@ client.on('message', message => {
     }
 });
 
+var cron = require("cron");
+const { verseArray } = require("./verses.json");
+
+function bibleVerse() {
+
+    randomVerse = Math.floor(Math.random() * verseArray.length);
+    verse = verseArray[randomVerse][0];
+
+    client.guilds.cache.map(guild => {
+        thischannel = guild.channels.cache.find(channel => channel.name === 'general' || channel.name === '✨▸general');
+        
+        try{
+            thischannel.send(verse);
+        } catch(error) {
+            console.error(error);
+        }
+        
+    });
+}
+
+function morning() {
+    client.guilds.cache.map(guild => {
+        thischannel = guild.channels.cache.find(channel => channel.name === 'general' || channel.name === '✨▸general');
+        
+        try{
+            thischannel.send(`gm snap :heart:`);
+        } catch(error) {
+            console.error(error);
+        }
+        
+    });
+    bibleVerse();
+}
+
+function night() {
+    client.guilds.cache.map(guild => {
+        thischannel = guild.channels.cache.find(channel => channel.name === 'general' || channel.name === '✨▸general');
+        
+        try{
+            thischannel.send(`gn snap :heart:`);
+        } catch(error) {
+            console.error(error);
+        }
+        
+    });
+    bibleVerse();
+}
+
+let sayVerseMorning = new cron.CronJob('00 00 08 * * *', morning);
+let sayVerseNight = new cron.CronJob('00 00 00 * * *', night);
+
+sayVerseMorning.start();
+sayVerseNight.start();
+
 client.login(token);

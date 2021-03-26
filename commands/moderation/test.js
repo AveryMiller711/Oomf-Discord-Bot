@@ -10,13 +10,8 @@ module.exports = {
             return message.reply(`You do not have permission to use \`test\``);
         }
 
-        message.guild.members.fetch().then(fetchedMembers => {
-            fetchedMembers.forEach(member => {
-                if(member.user.bot){
-                    console.log('bot');
-                }
-            });
-        });
+        message.channel.send(message.guild.id);
+
 
         message.channel.send(`Tested!`);
     },
