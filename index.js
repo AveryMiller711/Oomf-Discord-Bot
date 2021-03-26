@@ -138,9 +138,11 @@ function night() {
 }
 
 let sayVerseMorning = new cron.CronJob('00 00 08 * * *', morning);
-let sayVerseNight = new cron.CronJob('00 00 00 * * *', night);
+let sayVerseNight = new cron.CronJob('00 00 23 * * *', night);
+let sayVerseDay = new cron.CronJob('00 00 11,02,05,08 * * *', bibleVerse);
 
 sayVerseMorning.start();
 sayVerseNight.start();
+sayVerseDay.start();
 
 client.login(token);
