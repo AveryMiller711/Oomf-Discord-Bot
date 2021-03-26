@@ -33,7 +33,7 @@ module.exports = {
             }
 
             const embed = new Discord.MessageEmbed()
-                .setAuthor('Command List', 'https://images-ext-2.discordapp.net/external/yA3ZlHkCIPgvkMiDmGE2M7GjoAFiobtgi5ZL6nCJj0g/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/776580934014337064/3da94dc96faa75d75dd1ddaa8ce226c1.png')
+                .setAuthor('Command List', client.user.displayAvatarURL())
                 .addFields(
                     { name: ':information_source: Info', value: info.join(', ')},
                     { name: ':hammer_pick: Moderation', value: mod.join(', ')},
