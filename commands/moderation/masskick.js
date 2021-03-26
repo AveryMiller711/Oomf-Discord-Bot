@@ -17,7 +17,7 @@ module.exports = {
                 return ['✅', '❌'].includes(reaction.emoji.name) && user.id === message.author.id;
             };
 
-            const timedOut = 10000;
+            const timedOut = 60000;
             const memberList = message.guild.members;
 
             if((args%1)===0 && args > 0) {
