@@ -1,14 +1,12 @@
-
-
 module.exports = {
-    name: 'test',
-    category: 'moderation',
-    description: 'Test command.',
-    cooldown: 5,
+    name: 'say',
+    category: 'fun',
+    description: 'Make the bot say something.',
+    cooldown: 3,
+    guildOnly: true,
+    args: true,
+    usage: '< message content > < OPTIONAL: --silent >',
     execute(message, args){
-        if(!message.member.hasPermission('ADMINISTRATOR')){
-            return message.reply(`You do not have permission to use \`test\``);
-        }
 
         if(args.length){
 
@@ -30,6 +28,5 @@ module.exports = {
             if(deleteMessage) message.delete();
         }
         
-        message.channel.send(`Tested!`);
     },
 };

@@ -7,6 +7,7 @@ client.commands = new Discord.Collection();
 
 const infoFiles = fs.readdirSync('./commands/info').filter(file => file.endsWith('.js'));
 const moderationFiles = fs.readdirSync('./commands/moderation').filter(file => file.endsWith('.js'));
+const funFiles = fs.readdirSync('./commands/fun').filter(file => file.endsWith('.js'));
 
 const cooldowns = new Discord.Collection();
 
@@ -19,6 +20,12 @@ for(const file of moderationFiles){
     const command = require(`./commands/moderation/${file}`);
     client.commands.set(command.name, command);
 }
+
+for(const file of funFiles){
+    const command = require(`./commands/fun/${file}`);
+    client.commands.set(command.name, command);
+}
+
 
 client.once('ready', () => {
     console.info(`Logged in as ${client.user.tag}!`);

@@ -3,6 +3,7 @@ const { prefix } = require('../../config.json');
 const fs = require('fs');
 const infoFiles = fs.readdirSync('./commands/info').filter(file => file.endsWith('.js'));
 const moderationFiles = fs.readdirSync('./commands/moderation').filter(file => file.endsWith('.js'));
+const funFiles = fs.readdirSync('./commands/fun').filter(file => file.endsWith('.js'));
 
 module.exports = {
     name: 'help',
@@ -15,6 +16,7 @@ module.exports = {
         const data = [];
         const info = [];
         const mod = [];
+        const fun = [];
         const { commands } = message.client;
 
         if(!args.length){
@@ -32,11 +34,18 @@ module.exports = {
                 mod.push(`\`${command.name}\``);
             }
 
+            for(const file of funFiles){
+                const command = require(`../fun/${file}`);
+                fun.push(`\`${command.name}\``);
+            }
+            
+
             const embed = new Discord.MessageEmbed()
                 .setAuthor('Command List', client.user.displayAvatarURL())
                 .addFields(
                     { name: ':information_source: Info', value: info.join(', ')},
                     { name: ':hammer_pick: Moderation', value: mod.join(', ')},
+                    { name: ':partying_face: Fun', value: fun.join(', ')},
                 )
                 .setFooter('To get more info on a command, do $help command name');
 
